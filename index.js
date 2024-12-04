@@ -1,12 +1,19 @@
 const express=require('express')
 const mongoose=require('mongoose')
-const dotenv=require('dotenv')
+const dotenv=require('dotenv');
+const { userRouter } = require('./routes/userrouter');
+const { adminRouter } = require('./routes/adminrouter');
 
 
 
 const app=express();
 app.use(express.json())
 dotenv.config()
+
+
+app.use('/api/user',userRouter)
+app.use('/api/admin',adminRouter)
+
 
 async function main(){
     try {
@@ -16,14 +23,8 @@ async function main(){
         console.log(error.message)
     }
 }
-
 main();
 
-app.get('/',(req,res)=>{
-    res.send({
-        msg:"it going"
-    })
-})
 
 
 
