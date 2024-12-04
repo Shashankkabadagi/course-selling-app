@@ -60,11 +60,33 @@ try {
 }
 }
 
-
+const profile= async(req,res)=>{
+    try {
+        const adminId=req.adminId
+    
+        const profileData=await Admin.findById({
+            _id:adminId
+        })
+        if(!profileData){
+            res.status(404).send({
+                msg:"data not found"
+            })
+        }
+        res.status(200).send({
+            profile:profileData
+        })
+    } catch (error) {
+        res.status(500).send({
+            error:error.message
+        })
+    }
+    }
+    
 
 
 
 module.exports={
     signup,
-    signin
+    signin,
+    profile
 }

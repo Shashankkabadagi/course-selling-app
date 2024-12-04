@@ -59,11 +59,32 @@ try {
 }
 }
 
+const profile= async(req,res)=>{
+try {
+    const userId=req.userId
 
+    const profileData=await User.findById({
+        _id:userId
+    })
+    if(!profileData){
+        res.status(404).send({
+            msg:"data not found"
+        })
+    }
+    res.status(200).send({
+        profile:profileData
+    })
+} catch (error) {
+    res.status(500).send({
+        error:error.message
+    })
+}
+}
 
 
 
 module.exports={
     signup,
-    signin
+    signin,
+    profile
 }
