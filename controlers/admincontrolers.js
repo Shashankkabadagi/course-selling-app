@@ -145,11 +145,35 @@ const updatecourse=async(req,res)=>{
     }
 }
 
+const deletecourse=async(req,res)=>{
+    try {
+        const {courseId}=req.body
+        const adminId=req.adminId
+    
+       await Course.findOneAndDelete({
+            _id:courseId,
+            createrId:adminId
+        })
+       
+        
+        res.status(200).send({
+            msg:'course deleted successfully'
+        })
+    } catch (error) {
+        res.status(500).send({
+            error:error.message
+        })
+    }
+
+
+}
+
 module.exports={
     signup,
     signin,
     profile,
     course,
     getcourse,
-    updatecourse
+    updatecourse,
+    deletecourse
 }

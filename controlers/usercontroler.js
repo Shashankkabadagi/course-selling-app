@@ -1,6 +1,8 @@
 const { User } = require("../Models/userSchema");
 const bcrypt= require('bcrypt')
-const jwt= require('jsonwebtoken')
+const jwt= require('jsonwebtoken');
+const { Course } = require("../Models/courseSchema");
+const { Purchse } = require("../Models/purchase");
 
 const signup=async (req,res)=>{
     try {
@@ -81,10 +83,62 @@ try {
 }
 }
 
+const getcourse=async(req,res)=>{
+    try {
+        const courses=await Course.find()
+    
+        res.send({
+            courses
+        })
+    } catch (error) {
+        res.send({
+            error:error.message
+        })
+    }
+}
 
+const purchaseCourse=async (req,res)=>{
+    try {
+        const userId=req.userId
+        const {courseId}=req.body
+    
+        await Purchse.create({
+            userId:userId,
+            courseId
+        })
+        res.send({
+            msg:"course purchased"
+        })
+    } catch (error) {
+        res.status(500).send({
+            error:error.message
+        })
+    }
+}
+
+const getPurchases=async(req,res)=>{
+    try {
+        const userId=req.userId
+    
+        const purchases=await Purchse.find({
+            userId:userId
+        }).populate('courseId','title price')
+    
+        res.send({
+            purchases
+        })
+    } catch (error) {
+        res.send({
+            error:error.message
+        })
+    }
+}
 
 module.exports={
     signup,
     signin,
-    profile
+    profile,
+    getcourse,
+    purchaseCourse,
+    getPurchases
 }
